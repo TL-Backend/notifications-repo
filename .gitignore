@@ -1,0 +1,6 @@
+# package directories
+node_modules
+smsNotifications/node_modules
+pushNotifications/node_modules
+emailNotifications/node_modules
+notificationManager/node_modules
