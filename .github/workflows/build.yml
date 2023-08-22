@@ -16,7 +16,7 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Test and coverage
-        run: yarn mocha --coverage
+        run: yarn mocha ../notificationManager/test/**.test.js,../emailNotifications/test/**.test.js,../pushNotifications/test/**.test.js,../smsNotifications/test/**.test.js
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
