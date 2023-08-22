@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class notification_audit extends Model {
+  class notification_audits extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,21 +13,19 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  notification_audit.init({
+  notification_audits.init({
     channel: DataTypes.STRING,
-    message_body: DataTypes.STRING,
+    contact_details: DataTypes.JSONB,
     status: DataTypes.STRING,
-    error_response: DataTypes.STRING,
-    group_id: DataTypes.STRING,
+    success_response: DataTypes.JSONB,
+    error_response: DataTypes.JSONB,
+    content: DataTypes.JSONB,
     user_id: DataTypes.STRING,
-    success_response: DataTypes.STRING,
-    template_id: DataTypes.STRING,
-    mobile_number: DataTypes.STRING,
-    email: DataTypes.STRING,
-    token: DataTypes.STRING
+    group_id: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'notification_audit',
+    modelName: 'notification_audits',
+    underscored: true
   });
-  return notification_audit;
+  return notification_audits;
 };

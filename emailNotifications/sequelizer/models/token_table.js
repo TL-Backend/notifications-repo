@@ -16,10 +16,17 @@ module.exports = (sequelize, DataTypes) => {
   token_table.init({
     token: DataTypes.STRING,
     device: DataTypes.STRING,
-    user_id: DataTypes.STRING
+    user_id: DataTypes.STRING,
+    created_at: {
+      type: 'TIMESTAMP'
+    },
+    updated_at: {
+      type: 'TIMESTAMP'
+    }
   }, {
     sequelize,
     modelName: 'token_table',
+    underscored: true
   });
   return token_table;
 };

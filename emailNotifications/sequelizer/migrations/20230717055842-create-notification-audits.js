@@ -12,34 +12,25 @@ module.exports = {
       channel: {
         type: Sequelize.STRING
       },
-      message_body: {
-        type: Sequelize.STRING
+      contact_details: {
+        type: Sequelize.JSONB
       },
       status: {
         type: Sequelize.STRING
       },
-      error_response: {
-        type: Sequelize.STRING
+      success_response: {
+        type: Sequelize.JSONB
       },
-      group_id: {
-        type: Sequelize.STRING
+      error_response: {
+        type: Sequelize.JSONB
+      },
+      content: {
+        type: Sequelize.JSONB
       },
       user_id: {
         type: Sequelize.STRING
       },
-      success_response: {
-        type: Sequelize.STRING
-      },
-      template_id: {
-        type: Sequelize.STRING
-      },
-      mobile_number: {
-        type: Sequelize.STRING
-      },
-      email: {
-        type: Sequelize.STRING
-      },
-      token: {
+      group_id: {
         type: Sequelize.STRING
       },
       created_at: {

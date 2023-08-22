@@ -1,34 +1,37 @@
+
+const { connectDb } = require('./config/connections');
+const { connectToRabbitMQ } = require('./config/connections');
 const express = require('express');
 const app = express();
-const sendChannelBasedNotification = require('./helper')
-const { sequelize } = require('./sequelizer/models/index')
+const notificationManager = require('./notificationManager');
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-const connectDb = async () => {
-    try {
-        await sequelize.authenticate();
-        console.info('Connected to db');
-    } catch (err) {
-        console.error('failed to connect to db', err);        
-    }
-}
+let channel;
 
 app.post("/", async(req, res) => {
     try{
-      sendChannelBasedNotification(req)
+      console.log("res body", req.body)
+      const response = await notificationManager(req.body.data, channel.data)
+      res.status(200).send(response);
     }catch(err){
+      res.send(err);
       console.error(err)
     }
 })
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
 try {
     (async () => {
-      await connectDb();
-      console.log('connected');
-      app.listen(3000, () => {
-        console.info(`server started running on port 3000`);
+      channel = await connectToRabbitMQ();
+      if(channel.error){
+        throw new Error(channel.message)
+      }
+      const DbConnect = await connectDb();
+      if(DbConnect.error){
+        throw new Error(DbConnect.message)
+      }
+      app.listen(4000, () => {
+        console.info(`server started running on port 4000`);
       });
     })();
   } catch (err) {
