@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=lcov --reporter=text mocha 'notificationManager/test/**/*.test.js'",
+    "test": "nyc --reporter=lcov --reporter=text mocha",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx sonar-scanner"
   },
   "keywords": [],
