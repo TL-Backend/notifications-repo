@@ -14,9 +14,9 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: Install dependencies
-        run: yarn
+        run: npm i
       - name: Test and coverage
-        run: yarn mocha ../notificationManager/test/**.test.js,../emailNotifications/test/**.test.js,../pushNotifications/test/**.test.js,../smsNotifications/test/**.test.js
+        run: mocha ../notificationManager/test/**.test.js,../emailNotifications/test/**.test.js,../pushNotifications/test/**.test.js,../smsNotifications/test/**.test.js
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
