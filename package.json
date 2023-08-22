@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha"
+    "test": "nyc --reporter=lcov --reporter=text mocha 'notificationManager/test/**/*.test.js'",
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx sonar-scanner"
   },
   "keywords": [],
   "author": "",
@@ -14,7 +15,9 @@
     "eslint": "^8.44.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.27.5",
-    "mocha": "^10.2.0"
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0",
+    "sonarqube-scanner": "^3.0.1"
   },
   "dependencies": {
     "ansi-colors": "^4.1.3",
