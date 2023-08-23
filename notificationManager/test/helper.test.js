@@ -1,6 +1,6 @@
 const chai = require('chai');
 const rewire = require("rewire");
-const helperMain = rewire("../helper.js");
+let helperMain = rewire("../helper.js");
 const singleFunctionCheck = require("../helper.js");
 
 const expect = chai.expect;
