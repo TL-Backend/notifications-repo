@@ -1,5 +1,5 @@
 //const response = await sendChannelBasedNotification(req.body, channel)
-const sendChannelBasedNotification = require('./helper')
+const { sendChannelBasedNotification } = require('./helper')
 
 
 const notificationManager = async ( inputPayload, channel ) => {

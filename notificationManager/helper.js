@@ -32,7 +32,7 @@ const notificationsList = {
     EMAIL_NOTIFICATION: emailNotificationParamsValidator
 }
 
-const sendMessageToQueue = async (message, routingKey, channel) => {;
+exports.sendMessageToQueue = async (message, routingKey, channel) => {;
     try {
         await channel.assertExchange(exchange_name, exchange_type, { durable: true });
         await channel.publish(exchange_name, routingKey, Buffer.from(message));
@@ -50,7 +50,7 @@ const sendMessageToQueue = async (message, routingKey, channel) => {;
     }
 }
 
-const saveNotificationToDB = async (message, group_id, channel) => {
+exports.saveNotificationToDB = async (message, group_id, channel) => {
     try{
     //save the notification in db
     let contact = {};
@@ -109,7 +109,7 @@ const saveNotificationToDB = async (message, group_id, channel) => {
     }
 }
 
-const validateNotificationType = (channels) => {
+exports.validateNotificationType = (channels) => {
     if(!Array.isArray(channels) || channels.length === 0){
         return{
             code: 403,
@@ -141,7 +141,7 @@ const validateNotificationType = (channels) => {
 }
 
 
-const sendChannelBasedNotification = async(channel, channelConfig) => {
+exports.sendChannelBasedNotification = async(channel, channelConfig) => {
     try{
 
     const validate = validateNotificationType(channel);
