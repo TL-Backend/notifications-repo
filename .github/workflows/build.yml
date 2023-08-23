@@ -19,7 +19,8 @@ jobs:
           node-version: 16
       - name: install dependencies
         run: yarn install
-
+      - name: Test and coverage
+        run: yarn jest --coverage
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
