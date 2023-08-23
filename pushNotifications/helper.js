@@ -12,7 +12,7 @@ admin.initializeApp({
 });
 
 
-const sendPushNotification = async (payload) => {
+exports.sendPushNotification = async (payload) => {
   try{
     const { title, body } = payload
     if(!title || !body){
@@ -57,7 +57,7 @@ const sendPushNotification = async (payload) => {
   }
 };
 
-const updateDBNotification = async (resp, id) => {
+exports.updateDBNotification = async (resp, id) => {
   try{
   let updateParams = {};
   if(!resp || !id){
@@ -91,7 +91,7 @@ const updateDBNotification = async (resp, id) => {
   }
 }
 
-const pushNotificationHelper = async (message) => {
+exports.pushNotificationHelper = async (message) => {
     try
     {
     const { message_type, notification_id } = message;
@@ -125,8 +125,8 @@ const pushNotificationHelper = async (message) => {
   }
 }
 
-module.exports = {
-    pushNotificationHelper,
-    updateDBNotification,
-    sendPushNotification
-}
+// module.exports = {
+//     pushNotificationHelper,
+//     updateDBNotification,
+//     sendPushNotification
+// }

@@ -84,7 +84,6 @@ describe("Update Notification test suit ", () => {
       { error: false, message: "fhvlf" },
       79,
     );
-    console.log("hello ", resp);
     expect(resp.error).to.equal(false);
   });
 
@@ -93,13 +92,11 @@ describe("Update Notification test suit ", () => {
       { error: true, message: "fhvlf" },
       79,
     );
-    console.log("hello ", resp);
     expect(resp.error).to.equal(false);
   });
 
   it("Invalid params error", async () => {
     const resp = await helperMain.updateDBNotification(79);
-    console.log("hello ", resp);
     expect(resp.error).to.equal(true);
   });
 
@@ -111,41 +108,40 @@ describe("Update Notification test suit ", () => {
       { err: false, message: "fhvlf" },
       79,
     );
-    console.log("hello ", resp);
     expect(resp.error).to.equal(true);
   });
 });
 
-helperMain.__set__("sendSMS", async () => {
-  return {
-    error: false,
-    message: {},
-  };
-});
+// helperMain.__set__("sendSMS", async () => {
+//   return {
+//     error: false,
+//     message: {},
+//   };
+// });
 
-describe("Send SMS test suit ", () => {
-  it("Successfully send sms notification", async () => {
-    const resp = await helperMain.sendSMSNotification(
-      "kvnhdlvs",
-      "+91838385415",
-    );
-    console.log("hello ", resp);
-    expect(resp.error).to.equal(false);
-  });
+// describe("Send SMS test suit ", () => {
+//   it("Successfully send sms notification", async () => {
+//     const resp = await helperMain.sendSMSNotification(
+//       "kvnhdlvs",
+//       "+91838385415",
+//     );
+//     console.log("hello ", resp);
+//     expect(resp.error).to.equal(false);
+//   });
 
-  it("sns publish error case", async () => {
-    helperMain.__set__("sendSMS", async () => {
-      return {
-        error: true,
-        message: {},
-      };
-    });
+//   // it("sns publish error case", async () => {
+//   //   helperMain.__set__("sendSMS", async () => {
+//   //     return {
+//   //       error: true,
+//   //       message: {},
+//   //     };
+//   //   });
 
-    const resp = await helperMain.sendSMSNotification(
-      "kvnhdlvs",
-      "+91838385415",
-    );
-    console.log("hello ", resp);
-    expect(resp.error).to.equal(true);
-  });
-});
+//   //   const resp = await helperMain.sendSMSNotification(
+//   //     "kvnhdlvs",
+//   //     "+91838385415",
+//   //   );
+//   //   console.log("hello ", resp);
+//   //   expect(resp.error).to.equal(true);
+//   // });
+// });

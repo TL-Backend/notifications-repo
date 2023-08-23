@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && npx sonar-scanner"
   },
   "keywords": [],

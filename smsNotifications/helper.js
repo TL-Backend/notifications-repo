@@ -29,7 +29,7 @@ const sendSMS = (params) => {
   });
 };
 
-const sendSMSNotification = async (message_content,mobile) => {
+exports.sendSMSNotification = async (message_content,mobile) => {
   try {
     const params = {
         Message: message_content, // The content of your SMS message
@@ -52,7 +52,7 @@ const sendSMSNotification = async (message_content,mobile) => {
     }
 }
 
-const updateDBNotification = async (resp, id) => {
+exports.updateDBNotification = async (resp, id) => {
   try{
   let updateParams = {};
   if(!resp || !id){
@@ -95,7 +95,7 @@ const validateInput = (message, mobile) => {
   return false;
 }
 
-const smsNotificationHelper = async (input) => {
+exports.smsNotificationHelper = async (input) => {
   try{
     const validator = validateInput(input.message_content, input.mobile)
     if(validator){
@@ -121,8 +121,8 @@ const smsNotificationHelper = async (input) => {
   }
 }
 
-module.exports = {
-    smsNotificationHelper,
-    updateDBNotification,
-    sendSMSNotification
-}
+// module.exports. = {
+//     smsNotificationHelper,
+//     updateDBNotification,
+//     sendSMSNotification
+// }

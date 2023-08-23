@@ -9,7 +9,7 @@ AWS.config.update({
 
 const ses = new AWS.SES({ apiVersion: '2010-12-01' });
 
-const sendEmail = (params) => {
+exports.sendEmail = (params) => {
   return new Promise((resolve, reject) => {
     ses.sendEmail(params, (err, data) => {
       if (err) {
@@ -30,7 +30,7 @@ const sendEmail = (params) => {
 };
 
 
-const sendEMAILNotification = async (param) => {
+exports.sendEMAILNotification = async (param) => {
   const params = {
     Source: 'virtualdeveloper001@gmail.com', // Replace with the verified sender email address
     Destination: {
@@ -69,7 +69,7 @@ const sendEMAILNotification = async (param) => {
 };
 
 
-const updateDBNotification = async (resp, id) => {
+exports.updateDBNotification = async (resp, id) => {
     try{
     let updateParams = {};
     if(!resp || !id){
@@ -110,7 +110,7 @@ const updateDBNotification = async (resp, id) => {
   }
   
 
-const emailNotificationHelper = async (message) => {
+exports.emailNotificationHelper = async (message) => {
   try{
     const { notification_id } = message;
     const validator = validateInput(message.email, message.body);
@@ -139,9 +139,9 @@ const emailNotificationHelper = async (message) => {
   }
 }
 
-module.exports = {
-    emailNotificationHelper,
-    updateDBNotification,
-    sendEMAILNotification,
-    sendEmail
-}
+// module.exports. = {
+//     emailNotificationHelper,
+//     updateDBNotification,
+//     sendEMAILNotification,
+//     sendEmail
+// }
