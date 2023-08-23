@@ -185,8 +185,8 @@ exports.sendChannelBasedNotification = async(channel, channelConfig) => {
 }
 
 
-module.exports = {
-    sendChannelBasedNotification,
-    saveNotificationToDB,
-    sendMessageToQueue
-};
+// module.exports = {
+//     sendChannelBasedNotification,
+//     saveNotificationToDB,
+//     sendMessageToQueue
+// };
