@@ -1,7 +1,7 @@
 const assert = require('chai').assert;
 //const sayHello = require('../app').sayHello;
 //const addNumbers = require('../app').addNumbers;
-const app = require("../addition");
+const app = require("./addition");
 // Results
 sayHelloResult = app.sayHello();
 addNumbersResult = app.addNumbers(5,5);
