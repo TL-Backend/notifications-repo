@@ -1,6 +1,5 @@
 
-const { connectDb } = require('./config/connections');
-const { connectToRabbitMQ } = require('./config/connections');
+const { connectToRabbitMQ, connectDb } = require('./config/connections');
 const express = require('express');
 const app = express();
 const notificationManager = require('./notificationManager');
@@ -20,23 +19,61 @@ app.post("/", async(req, res) => {
       console.error(err)
     }
 })
+const connectDbPromise = () => {
+  return new Promise((resolve, reject) => {
+    connectDb((err, data) => {
+      if (err) {
+        console.error('DB Connction error:', err);
+        reject({
+          error: true,
+          message: err
+        });
+      } else {
+        console.log('Database connected', data);
+        resolve({
+          error: false,
+          message: data
+        });
+      }
+    });
+  });
+}
+
+const connectToRabbitMQPromise = () => {
+  return new Promise((resolve, reject) => {
+    connectToRabbitMQ((err, data) => {
+      if (err) {
+        console.error('RabbitMq Connction error:', err);
+        reject({
+          error: true,
+          message: err
+        });
+      } else {
+        console.log('RabbitMQ connected', data);
+        resolve({
+          error: false,
+          message: data
+        });
+      }
+    });
+  });
+}
 
 try {
-    (async () => {
-      channel = await connectToRabbitMQ();
-      if(channel.error){
-        throw new Error(channel.message)
-      }
-      const DbConnect = await connectDb();
-      if(DbConnect.error){
-        throw new Error(DbConnect.message)
-      }
-      app.listen(4000, () => {
-        console.info(`server started running on port 4000`);
-      });
-    })();
-  } catch (err) {
-    console.error(`Error in starting the server ${err}`);
-  }
-
+  ( () => {
+    const dbConnect = connectDbPromise();
+    if(dbConnect.error){
+      throw new Error();
+    }
+    const rabbitMq = connectToRabbitMQPromise();
+    if(rabbitMq.error){
+      throw new Error();
+    }
+    app.listen(3006, () => {
+      console.info(`server started running on port 3000`);
+    });
+  })();
+} catch (err) {
+  console.error(`Error in starting the server ${err}`);
+}
 exports.module = app;
