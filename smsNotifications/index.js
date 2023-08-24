@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 5001;
 
 app.use(express.json());
 // let consumerTag = null;
-
+app.disable("x-powered-by");
 try {
   (async () => {
     await connectDb();

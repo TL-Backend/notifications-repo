@@ -6,6 +6,7 @@ const app = express();
 const notificationManager = require('./notificationManager');
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.disable("x-powered-by");
 
 let channel;
 
