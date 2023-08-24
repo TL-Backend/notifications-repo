@@ -42,17 +42,5 @@
     "mysql2": "^3.6.0",
     "prettier": "^3.0.0",
     "rewire": "^7.0.0"
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "notificationManager/tests/helper.test.js",
-      "smsNotifications/tests/helper.test.js",
-      "pushNotifications/tests/helper.test.js",
-      "emailNotifications/tests/helper.test.js"
-    ],
-    "testEnvironment": "node",
-    "transform": {
-      "^.+\\.js$": "babel-jest"
-    }
   }
 }
