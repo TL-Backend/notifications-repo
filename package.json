@@ -42,5 +42,14 @@
     "mysql2": "^3.6.0",
     "prettier": "^3.0.0",
     "rewire": "^7.0.0"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/**/*.test.js"     
+    ],
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    }
   }
 }
