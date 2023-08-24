@@ -4,9 +4,6 @@ const { randomUUID } = require("crypto");
 const exchange_name = "notification-exchange";
 const exchange_type = "direct";
 const {
-  pushNotificationParamsValidator,
-  smsNotificationParamsValidator,
-  emailNotificationParamsValidator,
   validateNotificationType,
 } = require("./validate/validateParams");
 

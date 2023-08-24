@@ -2,10 +2,10 @@ const AWS = require('aws-sdk');
 const { notification_audits } = require('./sequelizer/models');
 
 AWS.config.update({
-    accessKeyId: 'AKIA43IE3ZAJWOAAODLP',
-    secretAccessKey: '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',
-    region: 'ap-south-1'
-  });
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
+  region: process.env.REGION
+});
 
 const ses = new AWS.SES({ apiVersion: '2010-12-01' });
 
