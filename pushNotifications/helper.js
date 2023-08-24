@@ -7,9 +7,9 @@ const admin = require("firebase-admin");
 
 require("dotenv").config();
 
-admin.initializeApp({
-  credential: admin.credential.cert(JSON.parse(process.env.SERVICE_JSON_KEY)),
-});
+// admin.initializeApp({
+//   credential: admin.credential.cert(JSON.parse(process.env.SERVICE_JSON_KEY)),
+// });
 
 
 exports.sendPushNotification = async (payload) => {
