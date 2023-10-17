@@ -12,63 +12,64 @@ let channel;
 app.post("/", async(req, res) => {
     try{
       console.log("res body", req.body)
-      const response = await notificationManager(req.body.data, channel.data)
+      const response = await notificationManager(req.body, channel)
       res.status(200).send(response);
     }catch(err){
       res.send(err);
       console.error(err)
     }
 })
-const connectDbPromise = () => {
-  return new Promise((resolve, reject) => {
-    connectDb((err, data) => {
-      if (err) {
-        console.error('DB Connction error:', err);
-        reject({
-          error: true,
-          message: err
-        });
-      } else {
-        console.log('Database connected', data);
-        resolve({
-          error: false,
-          message: data
-        });
-      }
-    });
-  });
-}
+// const connectDbPromise = () => {
+//   return new Promise((resolve, reject) => {
+//     connectDb((err, data) => {
+//       if (err) {
+//         console.error('DB Connction error:', err);
+//         reject({
+//           error: true,
+//           message: err
+//         });
+//       } else {
+//         console.log('Database connected', data);
+//         resolve({
+//           error: false,
+//           message: data
+//         });
+//       }
+//     });
+//   });
+// }
 
-const connectToRabbitMQPromise = () => {
-  return new Promise((resolve, reject) => {
-    connectToRabbitMQ((err, data) => {
-      if (err) {
-        console.error('RabbitMq Connction error:', err);
-        reject({
-          error: true,
-          message: err
-        });
-      } else {
-        console.log('RabbitMQ connected', data);
-        resolve({
-          error: false,
-          message: data
-        });
-      }
-    });
-  });
-}
+// const connectToRabbitMQPromise = () => {
+//   return new Promise((resolve, reject) => {
+//     connectToRabbitMQ((err, data) => {
+//       if (err) {
+//         console.error('RabbitMq Connction error:', err);
+//         reject({
+//           error: true,
+//           message: err
+//         });
+//       } else {
+//         console.log('RabbitMQ connected', data);
+//         resolve({
+//           error: false,
+//           message: data
+//         });
+//       }
+//     });
+//   });
+// }
 
 try {
-  ( () => {
-    const dbConnect = connectDbPromise();
+  ( async() => {
+    const dbConnect = await connectDb();
     if(dbConnect.error){
       throw new Error();
     }
-    const rabbitMq = connectToRabbitMQPromise();
+    const rabbitMq = await connectToRabbitMQ();
     if(rabbitMq.error){
       throw new Error();
     }
+    channel = rabbitMq.data
     app.listen(3006, () => {
       console.info(`server started running on port 3000`);
     });

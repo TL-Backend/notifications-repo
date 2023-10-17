@@ -14,11 +14,9 @@ const notificationManager = async ( inputPayload, channel ) => {
      */
 
     try {
-       const resp = await sendChannelBasedNotification(inputPayload, channel)
+       const resp = await sendChannelBasedNotification(inputPayload.channels, channel)
 
-    return {
-        success: true,
-    }
+    return resp;
     } catch (error) {
         
         console.log("Error occured while builing the notificaiton", error)

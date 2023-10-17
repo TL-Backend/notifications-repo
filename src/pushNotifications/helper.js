@@ -30,7 +30,7 @@ exports.sendPushNotification = async (payload) => {
       },
       data: payload?.data,
       token:
-        "e_LYlL27QBGKeTBqcc5CZ1:APA91bGuTTZdsTbr8VhXdpI1e_McUSfDDQyKshqGDrlWaNCruTqtQ_73c4Kk_qO8xHstReQV-rYQhMVdLtbQjaRx1u7s1wzPQXIcsQKEN4eTqyA5aLMq33UOCeUEZZSmmiqPZhgI1zN5",
+        "eRqh76O2Q6y6puMrWQX6YY:APA91bHd0oLmWcy6FzZeuqGKi-aB_XfiwyAJkVo7zkC7OD9IZ2zwaYn36jxHkBy6C0Id9HgKay3cmZcjDaYLR3s9vw4QwRpXTha89CtDLZC9NkNED4Kmyg0n0nyi_pPqMS11DpfRw0I6",
     };
   } else {
     message = {
@@ -40,10 +40,12 @@ exports.sendPushNotification = async (payload) => {
       },
       data: payload?.data,
       topic:
-        "e_LYlL27QBGKeTBqcc5CZ1:APA91bGuTTZdsTbr8VhXdpI1e_McUSfDDQyKshqGDrlWaNCruTqtQ_73c4Kk_qO8xHstReQV-rYQhMVdLtbQjaRx1u7s1wzPQXIcsQKEN4eTqyA5aLMq33UOCeUEZZSmmiqPZhgI1zN5",
+        "eRqh76O2Q6y6puMrWQX6YY:APA91bHd0oLmWcy6FzZeuqGKi-aB_XfiwyAJkVo7zkC7OD9IZ2zwaYn36jxHkBy6C0Id9HgKay3cmZcjDaYLR3s9vw4QwRpXTha89CtDLZC9NkNED4Kmyg0n0nyi_pPqMS11DpfRw0I6",
     };
   }
   const res = await admin.messaging().send(message);
+  console.log("responsee..")
+  console.log(res)
   return{
     error: false,
     message: { res },
@@ -104,11 +106,12 @@ exports.pushNotificationHelper = async (message) => {
       };
     }
     const payload = messageType(message);
+    console.log("entering here...",payload)
     if (payload.error) {
       return payload;
     }
-    const response = await sendPushNotification(payload.notificationPayload);
-    const resp = await updateDBNotification(response, notification_id);
+    const response = await this.sendPushNotification(payload.notificationPayload);
+    const resp = await this.updateDBNotification(response, notification_id);
     if(resp.error){
       throw new Error("error while updating notification");
     }
@@ -118,6 +121,7 @@ exports.pushNotificationHelper = async (message) => {
       message: "Message sent successfully"
     }
   } catch (err) {
+    console.log("err......",err)
     return {
       error: true,
       message: "Internal error"

@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const { notification_audits } = require('./sequelizer/models');
-
+require("dotenv").config();
 AWS.config.update({
   accessKeyId: process.env.ACCESS_KEY_ID,
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
@@ -49,7 +49,8 @@ exports.sendEMAILNotification = async (param) => {
   };
 
   try {
-    const result = sendEmail(params);
+    const result = await this.sendEmail(params);
+    console.log("check test", result)
     if(result.error){
       return {
         error: false,
@@ -61,6 +62,7 @@ exports.sendEMAILNotification = async (param) => {
         message: { messageId: result.MessageId } 
     }
   } catch (error) {
+    console.log("ERR...",err)
     return { 
         error: true,
         message: { error }
@@ -114,14 +116,15 @@ exports.emailNotificationHelper = async (message) => {
   try{
     const { notification_id } = message;
     const validator = validateInput(message.email, message.body);
+    console.log("response after validator",validator)
     if(validator){
       throw new Error("invalid params")
     }
-    const response = await sendEMAILNotification(message);
+    const response = await this.sendEMAILNotification(message);
     if(response.error){
       throw new Error("sending notification failed")
     }
-    const resp = await updateDBNotification(response, notification_id);
+    const resp = await this.updateDBNotification(response, notification_id);
     if(resp.error){
       throw new Error("Updation of notification failed")
     }

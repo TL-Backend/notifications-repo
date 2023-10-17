@@ -1,6 +1,10 @@
 const AWS = require('aws-sdk');
 const { notification_audits } = require('./sequelizer/models');
-
+const dotenv = require('dotenv');
+dotenv.config({
+  path: `.env`,
+});
+// console.log(process.env.ACCESS_KEY_ID,process.env.SECRET_ACCESS_KEY,process.env.REGION)
 AWS.config.update({
     accessKeyId: process.env.ACCESS_KEY_ID,
     secretAccessKey: process.env.SECRET_ACCESS_KEY,
@@ -42,7 +46,9 @@ exports.sendSMSNotification = async (message_content,mobile) => {
         }
       };
       
-      const resp = sendSMS(params);
+      const resp = await sendSMS(params);
+      console.log("respnse...")
+      console.log(resp)
       return resp;
     }catch(err){
       return{
@@ -101,11 +107,11 @@ exports.smsNotificationHelper = async (input) => {
     if(validator){
       throw new Error("Invalid params")
     }
-    const response = await sendSMSNotification(input.message_content, input.mobile);
+    const response = await this.sendSMSNotification(input.message_content, input.mobile);
     if(response.error){
       throw new Error("sending notification failed")
     }
-    const resp = await updateDBNotification(response, input?.notification_id);
+    const resp = await this.updateDBNotification(response, input?.notification_id);
     if(resp.error){
       throw new Error("Updating notification failed")
     }
