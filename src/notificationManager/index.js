@@ -70,7 +70,7 @@ try {
       throw new Error();
     }
     channel = rabbitMq.data
-    app.listen(3006, () => {
+    app.listen(4000, () => {
       console.info(`server started running on port 3000`);
     });
   })();

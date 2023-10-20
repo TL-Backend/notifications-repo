@@ -67,7 +67,7 @@ exports.updateDBNotification = async (resp, id) => {
   }
   if(resp.error){
     updateParams["status"] = "Failed";
-    updateParams["error_response"] = resp.message
+    updateParams["error_response"] = { "message": resp.message }
   }
   else{
     updateParams["status"] = "Success";
@@ -99,6 +99,8 @@ exports.pushNotificationHelper = async (message) => {
     const { message_type, notification_id } = message;
     const messageType = notificationTypes[message_type];
     if (!messageType || message_type === undefined) {
+      let response = { error: true, message: 'Invalid Notifcation type' }
+      await this.updateDBNotification(response, notification_id);
       return {
         message: "Invalid Notifcation type",
         error: true,
@@ -108,6 +110,7 @@ exports.pushNotificationHelper = async (message) => {
     const payload = messageType(message);
     console.log("entering here...",payload)
     if (payload.error) {
+      await this.updateDBNotification(payload, notification_id);
       return payload;
     }
     const response = await this.sendPushNotification(payload.notificationPayload);

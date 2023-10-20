@@ -90,7 +90,7 @@ exports.sendChannelBasedNotification = async (channel, channelConfig) => {
       const notificationData = await this.saveNotificationToDB(
         channel[index].params,
         group_id,
-        channel[index].notification_type,
+        channel[index].notification_channel,
       );
       if (notificationData.error) {
         error = true;
@@ -100,7 +100,7 @@ exports.sendChannelBasedNotification = async (channel, channelConfig) => {
       channel[index].params["notification_id"] = notificationData.data;
       const resp = await this.sendMessageToQueue(
         JSON.stringify(channel[index].params),
-        channel[index].notification_type,
+        channel[index].notification_channel,
         channelConfig,
       );
       if (resp.error) {

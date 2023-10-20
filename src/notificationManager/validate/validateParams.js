@@ -35,13 +35,13 @@ const validateNotificationType = (channels) => {
     }
     let errors = [];
     channels.forEach(channel => {
-        if(notificationsList[channel.notification_type] === undefined || !channel.params){
+        if(notificationsList[channel.notification_channel] === undefined || !channel.params){
             errors.push(`${channel} is invalid data`);
             return;
         }
-        const valid_param = notificationsList[channel.notification_type](channel.params);
+        const valid_param = notificationsList[channel.notification_channel](channel.params);
         if (!valid_param) {
-            errors.push(`${channel.notification_type} contains Invalid params`);
+            errors.push(`${channel.notification_channel} contains Invalid params`);
         }
     });
     if(errors.length){

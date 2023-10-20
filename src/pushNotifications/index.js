@@ -2,7 +2,7 @@ const { sequelize } = require('./sequelizer/models/index');
 const { connectDb, connectToRabbitMQ } = require('./utils/connections')
 const express = require("express");
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 6002;
 app.disable("x-powered-by");
 
 app.use(express.json());
@@ -57,7 +57,7 @@ try {
     if(rabbitMq.error){
       throw new Error();
     }
-    app.listen(3000, () => {
+    app.listen(4002, () => {
       console.info(`server started running on port 3000`);
     });
   })();

@@ -32,7 +32,7 @@ exports.sendEmail = (params) => {
 
 exports.sendEMAILNotification = async (param) => {
   const params = {
-    Source: 'virtualdeveloper001@gmail.com', // Replace with the verified sender email address
+    Source: 'vikas@aerpace.com', // Replace with the verified sender email address
     Destination: {
       ToAddresses: [param.email], // Replace with the recipient email address
     },
@@ -53,13 +53,13 @@ exports.sendEMAILNotification = async (param) => {
     console.log("check test", result)
     if(result.error){
       return {
-        error: false,
+        error: true,
         message: result.message
       }
     }
     return{
         error: false,
-        message: { messageId: result.MessageId } 
+        message: { messageId: result.message.MessageId } 
     }
   } catch (error) {
     console.log("ERR...",err)
@@ -104,26 +104,32 @@ exports.updateDBNotification = async (resp, id) => {
     }
   }
 
-  const validateInput = (message, body) => {
-    if(!message || !body){
-      return true;
+  const validateInput = (data) => {
+    if(!data.email || !data.body || !data.subject){
+      return {
+        error: true,
+        message: "Email and Body and Subject required."
+      }
     }
-    return false;
+    return {
+      error: false,
+    }
   }
   
 
 exports.emailNotificationHelper = async (message) => {
   try{
     const { notification_id } = message;
-    const validator = validateInput(message.email, message.body);
-    console.log("response after validator",validator)
-    if(validator){
-      throw new Error("invalid params")
+    const validator = validateInput(message);
+    if(validator.error){
+      await this.updateDBNotification(validator, notification_id);
+      return {
+        code: 400,
+        error: true,
+        message: "Invalid inputs"
+      }
     }
     const response = await this.sendEMAILNotification(message);
-    if(response.error){
-      throw new Error("sending notification failed")
-    }
     const resp = await this.updateDBNotification(response, notification_id);
     if(resp.error){
       throw new Error("Updation of notification failed")
@@ -135,7 +141,7 @@ exports.emailNotificationHelper = async (message) => {
     }
   }catch(err){
       return {
-        code: 400,
+        code: 500,
         error: true,
         message: "Internal error"
       }

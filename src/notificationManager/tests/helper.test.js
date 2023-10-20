@@ -42,7 +42,7 @@ describe.only('Notification Manager', () => {
     it('Notification sucess case ', async () => {
         const input = [
             {
-                notification_type: 'PUSH_NOTIFICATION',
+                notification_channel: 'PUSH_NOTIFICATION',
                 params: {
                     user_id: 'user123',
                     token: 'push-token',
@@ -50,7 +50,7 @@ describe.only('Notification Manager', () => {
                 },
             },
             {
-                notification_type: 'SMS_NOTIFICATION',
+                notification_channel: 'SMS_NOTIFICATION',
                 params: {
                     user_id: 'user456',
                     mobile: '1234567890',
@@ -67,7 +67,7 @@ it('Notification Failed case DB', async () => {
         helperMain.__set__("saveNotificationToDB",saveNotificationToDBExceptionMock);
         const input = [
             {
-                notification_type: 'PUSH_NOTIFICATION',
+                notification_channel: 'PUSH_NOTIFICATION',
                 params: {
                     user_id: 'user123',
                     token: 'push-token',
@@ -75,7 +75,7 @@ it('Notification Failed case DB', async () => {
                 },
             },
             {
-                notification_type: 'SMS_NOTIFICATION',
+                notification_channel: 'SMS_NOTIFICATION',
                 params: {
                     user_id: 'user456',
                     mobile: '1234567890',
@@ -92,7 +92,7 @@ it('Notification Failed case DB', async () => {
         helperMain.__set__("sendMessageToQueue",sendMessageToQueueMockWithException);
         const input = [
             {
-                notification_type: 'PUSH_NOTIFICATION',
+                notification_channel: 'PUSH_NOTIFICATION',
                 params: {
                     user_id: 'user123',
                     token: 'push-token',
@@ -100,7 +100,7 @@ it('Notification Failed case DB', async () => {
                 },
             },
             {
-                notification_type: 'SMS_NOTIFICATION',
+                notification_channel: 'SMS_NOTIFICATION',
                 params: {
                     user_id: 'user456',
                     mobile: '1234567890',
@@ -115,7 +115,7 @@ it('Notification Failed case DB', async () => {
     it('Notification failed case With input validations error', async () => {
         const input = [
             {
-                notification_type: '',
+                notification_channel: '',
                 params: {
                     user_id: 'user123',
                     token: 'push-token',
@@ -123,7 +123,7 @@ it('Notification Failed case DB', async () => {
                 },
             },
             {
-                notification_type: 'SMS_NOTIFICATION',
+                notification_channel: 'SMS_NOTIFICATION',
                 params: {
                     user_id: 'user456',
                     mobile: '1234567890',
@@ -232,7 +232,7 @@ describe.only('Input fields test suit', () => {
     it('Valid input check test invalid sub data ', async () => { 
         const input = [
             {
-                notification_type: '',
+                notification_channel: '',
                 params: {
                     user_id: 'user123',
                     token: 'push-token',
@@ -240,7 +240,7 @@ describe.only('Input fields test suit', () => {
                 },
             },
             {
-                notification_type: 'SMS_NOTIFICATION',
+                notification_channel: 'SMS_NOTIFICATION',
                 params: {
                     user_id: 'user456',
                     mobile: '1234567890',
@@ -254,7 +254,7 @@ describe.only('Input fields test suit', () => {
     it('success case of input valid ', async () => { 
         const input = [
             {
-                notification_type: 'PUSH_NOTIFICATION',
+                notification_channel: 'PUSH_NOTIFICATION',
                 params: {
                     user_id: 'user123',
                     token: 'push-token',
@@ -262,7 +262,7 @@ describe.only('Input fields test suit', () => {
                 },
             },
             {
-                notification_type: 'SMS_NOTIFICATION',
+                notification_channel: 'SMS_NOTIFICATION',
                 params: {
                     user_id: 'user456',
                     mobile: '1234567890',

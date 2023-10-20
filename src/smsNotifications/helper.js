@@ -47,8 +47,6 @@ exports.sendSMSNotification = async (message_content,mobile) => {
       };
       
       const resp = await sendSMS(params);
-      console.log("respnse...")
-      console.log(resp)
       return resp;
     }catch(err){
       return{
@@ -96,16 +94,26 @@ exports.updateDBNotification = async (resp, id) => {
 
 const validateInput = (message, mobile) => {
   if(!message || !mobile){
-    return true;
+    return {
+      error: true,
+      message: "Message and Mobile number required"
+    }
   }
-  return false;
+  return {
+    error: false
+  }
 }
 
 exports.smsNotificationHelper = async (input) => {
   try{
     const validator = validateInput(input.message_content, input.mobile)
-    if(validator){
-      throw new Error("Invalid params")
+    if(validator.error){
+      await this.updateDBNotification(validator, input?.notification_id);
+      return {
+        code: 400,
+        error: true,
+        message: "Invalid inputs"
+      }
     }
     const response = await this.sendSMSNotification(input.message_content, input.mobile);
     if(response.error){
