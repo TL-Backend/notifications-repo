@@ -2,7 +2,7 @@ const {
   notificationTypes,
 } = require("./utils/notificationTypes/notificationTypes");
 
-const { notification_audits } = require("./sequelizer/models");
+const { aergov_notification_audits } = require("./services/aerpace-ecosystem-backend-db/src/databases/postgresql/models");
 
 const admin = require("firebase-admin");
 
@@ -73,7 +73,7 @@ exports.updateDBNotification = async (resp, id) => {
       updateParams["status"] = "Success";
       updateParams["success_response"] = resp.message;
     }
-    await notification_audits.update(updateParams, {
+    await aergov_notification_audits.update(updateParams, {
       where: { id }, // The condition to match the row by its id
       returning: false, // Returns the affected rows
     });

@@ -15,7 +15,7 @@ require('dotenv').config({ path: envFilePath });
 let channel;
 const port = process.env.PORT || 3000
 
-app.post("/", async(req, res) => {
+app.post("/notifications", async(req, res) => {
     try{
       console.log("res body", req.body)
       const response = await notificationManager(req.body, channel)
@@ -25,7 +25,6 @@ app.post("/", async(req, res) => {
       console.error(err)
     }
 })
-
 
 try {
   ( async() => {

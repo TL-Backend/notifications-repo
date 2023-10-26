@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const { notification_audits } = require('./sequelizer/models');
+const { aergov_notification_audits } = require('./services/aerpace-ecosystem-backend-db/src/databases/postgresql/models');
 require("dotenv").config();
 const { notificationTypes } = require("./utils/notificationTypes/notificationTypes");
 AWS.config.update({
@@ -86,7 +86,7 @@ exports.updateDBNotification = async (resp, id) => {
       updateParams["status"] = "Success";
       updateParams["success_response"] = resp.message
     }
-    await notification_audits.update(
+    await aergov_notification_audits.update(
       updateParams,
       {
         where: { id }, // The condition to match the row by its id

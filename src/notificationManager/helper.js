@@ -1,4 +1,4 @@
-const { notification_audits } = require("./sequelizer/models");
+const { aergov_notification_audits } = require("./services/aerpace-ecosystem-backend-db/src/databases/postgresql/models");
 const { randomUUID } = require("crypto");
 const { notificationTypes } = require("./notificationTypes/notificationTypes");
 const exchange_name = "notification-exchange";
@@ -38,10 +38,10 @@ exports.saveNotificationToDB = async (payload, group_id, channel) => {
       channel,
       status: "Pending",
       contact_details: payload?.contact_info,
-      content: payload?.content,
+      dynamic_content: payload?.content,
       notification_type: payload.notification_type
     };
-    const newNotification = await notification_audits.create(params);
+    const newNotification = await aergov_notification_audits.create(params);
     if (newNotification.id) {
       return {
         data: newNotification?.id,
