@@ -33,7 +33,7 @@ exports.sendEmail = (params) => {
 
 exports.sendEMAILNotification = async (param, email) => {
   const params = {
-    Source: 'pradeep@tilicho.in', // Replace with the verified sender email address
+    Source: 'vikas@aerpace.com', // Replace with the verified sender email address
     Destination: {
       ToAddresses: [email], // Replace with the recipient email address
     },

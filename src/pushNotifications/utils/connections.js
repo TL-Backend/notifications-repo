@@ -5,7 +5,9 @@ const binding_key = "PUSH_NOTIFICATION";
 const queue_name = "push-notifications-queue";
 const { pushNotificationHelper } = require("../helper");
 
-const { sequelize } = require("../sequelizer/models/index");
+const {
+  sequelize,
+} = require("../services/aerpace-ecosystem-backend-db/src/databases/postgresql/models/index");
 
 const connectDb = async () => {
   try {
