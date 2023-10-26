@@ -1,6 +1,6 @@
 const { notification_audits } = require("./sequelizer/models");
 const { randomUUID } = require("crypto");
-
+const { notificationTypes } = require("./notificationTypes/notificationTypes");
 const exchange_name = "notification-exchange";
 const exchange_type = "direct";
 const {
@@ -29,35 +29,17 @@ exports.sendMessageToQueue = async (message, routingKey, channel) => {
   }
 };
 
-exports.saveNotificationToDB = async (message, group_id, channel) => {
+exports.saveNotificationToDB = async (payload, group_id, channel) => {
   try {
     //save the notification in db
-    let contact = {};
-    let message_content = {};
-    if (!message || !group_id || !channel) {
-      throw new Error("Invalid params");
-    }
-    if (channel === "PUSH_NOTIFICATION") {
-      contact["token"] = message.token;
-      message_content["message_type"] = message.message_type;
-    } else if (channel === "SMS_NOTIFICATION") {
-      contact["mobile"] = message.mobile;
-      message_content["message"] = message.message_content;
-    } else if (channel === "EMAIL_NOTIFICATION") {
-      contact["email"] = message.email;
-      message_content["subject"] = message.subject || "";
-      message_content["body"] = message.body;
-      if (message.cc_email) contact["cc"] = message.cc_email;
-    } else {
-      throw new Error("Invalid notification type");
-    }
     const params = {
-      user_id: message.user_id,
+      user_id: payload.user_id,
       group_id,
       channel,
       status: "Pending",
-      contact_details: contact,
-      content: message_content,
+      contact_details: payload?.contact_info,
+      content: payload?.content,
+      notification_type: payload.notification_type
     };
     const newNotification = await notification_audits.create(params);
     if (newNotification.id) {
@@ -76,31 +58,41 @@ exports.saveNotificationToDB = async (message, group_id, channel) => {
   }
 };
 
-exports.sendChannelBasedNotification = async (channel, channelConfig) => {
+exports.sendChannelBasedNotification = async (payload, channelConfig) => {
   try {
-    const validate = validateNotificationType(channel);
-    if (validate.error) {
-      return validate;
+    const { contact_info, notification_type, notification_id } = payload;
+    const notificaitonType = notificationTypes[notification_type];
+    if(!notificaitonType){
+      return {
+        code: 400,
+        message: "Invalid notification_type",
+      };
     }
-
+    const validateInput = notificaitonType(payload);
+    if(validateInput.error){
+      return{
+        code: 400,
+        message: validateInput.message
+      }
+    }
     let group_id = randomUUID();
     let error = false;
     let message;
-    for (let index = 0; index < channel.length; index++) {
+    for (let index = 0; index < payload.channels.length; index++) {
       const notificationData = await this.saveNotificationToDB(
-        channel[index].params,
+        payload,
         group_id,
-        channel[index].notification_channel,
+        payload.channels[index],
       );
       if (notificationData.error) {
         error = true;
         message = "unable to save in DB";
         break;
       }
-      channel[index].params["notification_id"] = notificationData.data;
+      payload["notification_id"] = notificationData.data;
       const resp = await this.sendMessageToQueue(
-        JSON.stringify(channel[index].params),
-        channel[index].notification_channel,
+        JSON.stringify(payload),
+        payload.channels[index],
         channelConfig,
       );
       if (resp.error) {
@@ -117,6 +109,7 @@ exports.sendChannelBasedNotification = async (channel, channelConfig) => {
       message: "Messages are Sent...",
     };
   } catch (err) {
+    console.log("err",err)
     return {
       code: 400,
       message: "Internal error",

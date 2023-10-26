@@ -2,21 +2,10 @@
 const { sendChannelBasedNotification } = require('./helper')
 
 
-const notificationManager = async ( inputPayload, channel ) => {
-    /**
-     *    {
-     *         notificationType: "",
-     *         params: {
-     *              
-     *          }
-     *          
-     *      }
-     */
-
+const notificationManager = async ( notificationPayload, channel ) => {
     try {
-       const resp = await sendChannelBasedNotification(inputPayload.channels, channel)
-
-    return resp;
+        const resp = await sendChannelBasedNotification(notificationPayload, channel)
+        return resp;
     } catch (error) {
         
         console.log("Error occured while builing the notificaiton", error)

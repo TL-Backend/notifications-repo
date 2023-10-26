@@ -12,7 +12,7 @@ admin.initializeApp({
 });
 
 
-exports.sendPushNotification = async (payload) => {
+exports.sendPushNotification = async (payload, token) => {
   try{
     const { title, body } = payload
     if(!title || !body){
@@ -29,8 +29,7 @@ exports.sendPushNotification = async (payload) => {
         body: payload?.body,
       },
       data: payload?.data,
-      token:
-        "eRqh76O2Q6y6puMrWQX6YY:APA91bHd0oLmWcy6FzZeuqGKi-aB_XfiwyAJkVo7zkC7OD9IZ2zwaYn36jxHkBy6C0Id9HgKay3cmZcjDaYLR3s9vw4QwRpXTha89CtDLZC9NkNED4Kmyg0n0nyi_pPqMS11DpfRw0I6",
+      token: token,
     };
   } else {
     message = {
@@ -67,13 +66,12 @@ exports.updateDBNotification = async (resp, id) => {
   }
   if(resp.error){
     updateParams["status"] = "Failed";
-    updateParams["error_response"] = { "message": resp.message }
+    updateParams["error_response"] = resp.message
   }
   else{
     updateParams["status"] = "Success";
     updateParams["success_response"] = resp.message
   }
-  updateParams["contact_details"] = { token: resp.token}
   await notification_audits.update(
     updateParams,
     {
@@ -93,12 +91,12 @@ exports.updateDBNotification = async (resp, id) => {
   }
 }
 
-exports.pushNotificationHelper = async (message) => {
+exports.pushNotificationHelper = async (payload) => {
     try
     {
-    const { message_type, notification_id } = message;
-    const messageType = notificationTypes[message_type];
-    if (!messageType || message_type === undefined) {
+    const { contact_info, notification_type, notification_id } = payload;
+    const messageType = notificationTypes[notification_type];
+    if (!messageType) {
       let response = { error: true, message: 'Invalid Notifcation type' }
       await this.updateDBNotification(response, notification_id);
       return {
@@ -107,13 +105,9 @@ exports.pushNotificationHelper = async (message) => {
         code: 400,
       };
     }
-    const payload = messageType(message);
+    const messagePayload = messageType(payload);
     console.log("entering here...",payload)
-    if (payload.error) {
-      await this.updateDBNotification(payload, notification_id);
-      return payload;
-    }
-    const response = await this.sendPushNotification(payload.notificationPayload);
+    const response = await this.sendPushNotification(messagePayload, contact_info.token);
     const resp = await this.updateDBNotification(response, notification_id);
     if(resp.error){
       throw new Error("error while updating notification");

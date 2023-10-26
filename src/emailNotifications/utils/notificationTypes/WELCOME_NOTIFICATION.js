@@ -9,18 +9,13 @@ const replaceTemplateWithDynamicValues = (template, data) => {
   return updatedTemplate;
 };
 
-const processTemplate = (title, body, data) => {
-  const titleHasPlaceholders = /{{.*?}}/.test(title);
+const processTemplate = (body, data) => {
   const bodyHasPlaceholders = /{{.*?}}/.test(body);
-  let updatedTitle;
   let updatedBody;
-  if (titleHasPlaceholders) {
-    updatedTitle = replaceTemplateWithDynamicValues(title, data);
-  }
   if (bodyHasPlaceholders) {
     updatedBody = replaceTemplateWithDynamicValues(body, data);
   }
-  return { updatedTitle, updatedBody };
+  return { updatedBody };
 };
 
 const getNotificationPayload = (params) => {
@@ -29,23 +24,18 @@ const getNotificationPayload = (params) => {
     params.lang || "en"
   }`);
   const {
-    title, body
+    subject, body
   } = messageFn(params);
-  let updatedTitle;
   let updatedBody;
-  if (/{{.*?}}/.test(title) || /{{.*?}}/.test(body)) {
-    ({ updatedTitle, updatedBody } = processTemplate(
-      title,
+  if (/{{.*?}}/.test(body)) {
+    ({ updatedBody } = processTemplate(
       body,
       params.content,
     ));
   }
   return {
-    title: updatedTitle || title,
+    subject: subject,
     body: updatedBody || body,
-    data: {
-      user_id: params.user_id
-    },
   };
 };
 

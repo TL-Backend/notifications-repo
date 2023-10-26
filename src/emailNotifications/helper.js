@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 const { notification_audits } = require('./sequelizer/models');
 require("dotenv").config();
+const { notificationTypes } = require("./utils/notificationTypes/notificationTypes");
 AWS.config.update({
   accessKeyId: process.env.ACCESS_KEY_ID,
   secretAccessKey: process.env.SECRET_ACCESS_KEY,
@@ -30,11 +31,11 @@ exports.sendEmail = (params) => {
 };
 
 
-exports.sendEMAILNotification = async (param) => {
+exports.sendEMAILNotification = async (param, email) => {
   const params = {
     Source: 'vikas@aerpace.com', // Replace with the verified sender email address
     Destination: {
-      ToAddresses: [param.email], // Replace with the recipient email address
+      ToAddresses: [email], // Replace with the recipient email address
     },
     Message: {
       Subject: {
@@ -117,19 +118,21 @@ exports.updateDBNotification = async (resp, id) => {
   }
   
 
-exports.emailNotificationHelper = async (message) => {
+exports.emailNotificationHelper = async (payload) => {
   try{
-    const { notification_id } = message;
-    const validator = validateInput(message);
-    if(validator.error){
-      await this.updateDBNotification(validator, notification_id);
+    const { contact_info, notification_type, notification_id } = payload;
+    const messageType = notificationTypes[notification_type];
+    if (!messageType) {
+      let response = { error: true, message: 'Invalid Notifcation type' }
+      await this.updateDBNotification(response, notification_id);
       return {
-        code: 400,
+        message: "Invalid Notifcation type",
         error: true,
-        message: "Invalid inputs"
-      }
+        code: 400,
+      };
     }
-    const response = await this.sendEMAILNotification(message);
+    const messagePayload = messageType(payload);
+    const response = await this.sendEMAILNotification(messagePayload, contact_info.email);
     const resp = await this.updateDBNotification(response, notification_id);
     if(resp.error){
       throw new Error("Updation of notification failed")

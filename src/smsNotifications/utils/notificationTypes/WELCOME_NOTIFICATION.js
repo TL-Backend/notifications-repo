@@ -9,18 +9,13 @@ const replaceTemplateWithDynamicValues = (template, data) => {
   return updatedTemplate;
 };
 
-const processTemplate = (title, body, data) => {
-  const titleHasPlaceholders = /{{.*?}}/.test(title);
-  const bodyHasPlaceholders = /{{.*?}}/.test(body);
-  let updatedTitle;
-  let updatedBody;
-  if (titleHasPlaceholders) {
-    updatedTitle = replaceTemplateWithDynamicValues(title, data);
+const processTemplate = (message, data) => {
+  const messageHasPlaceholders = /{{.*?}}/.test(message);
+  let updatedMessage;
+  if (messageHasPlaceholders) {
+    updatedMessage = replaceTemplateWithDynamicValues(message, data);
   }
-  if (bodyHasPlaceholders) {
-    updatedBody = replaceTemplateWithDynamicValues(body, data);
-  }
-  return { updatedTitle, updatedBody };
+  return updatedMessage;
 };
 
 const getNotificationPayload = (params) => {
@@ -29,23 +24,17 @@ const getNotificationPayload = (params) => {
     params.lang || "en"
   }`);
   const {
-    title, body
+    message
   } = messageFn(params);
-  let updatedTitle;
-  let updatedBody;
-  if (/{{.*?}}/.test(title) || /{{.*?}}/.test(body)) {
-    ({ updatedTitle, updatedBody } = processTemplate(
-      title,
-      body,
+  let updatedMessage;
+  if (/{{.*?}}/.test(message)) {
+    updatedMessage = processTemplate(
+      message,
       params.content,
-    ));
+    );
   }
   return {
-    title: updatedTitle || title,
-    body: updatedBody || body,
-    data: {
-      user_id: params.user_id
-    },
+    message: updatedMessage || message,
   };
 };
 

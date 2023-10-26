@@ -1,6 +1,6 @@
 module.exports = {
   WELCOME_NOTIFICATION: (params) => ({
-    title: "welcome to aerpace",
+    subject: 'Welcome To Aerpace',
     body: `we have thrilled to invite you to the family of {{member_count}} menbers`,
   }),
 };
