@@ -3,11 +3,17 @@ const { connectToRabbitMQ, connectDb } = require('./config/connections');
 const express = require('express');
 const app = express();
 const notificationManager = require('./notificationManager');
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.disable("x-powered-by");
 
+const environment = process.env.NODE_ENV || 'development';
+const envFilePath = `config/${environment}.env`;
+require('dotenv').config({ path: envFilePath });
+
 let channel;
+const port = process.env.PORT || 3000
 
 app.post("/", async(req, res) => {
     try{
@@ -19,45 +25,7 @@ app.post("/", async(req, res) => {
       console.error(err)
     }
 })
-// const connectDbPromise = () => {
-//   return new Promise((resolve, reject) => {
-//     connectDb((err, data) => {
-//       if (err) {
-//         console.error('DB Connction error:', err);
-//         reject({
-//           error: true,
-//           message: err
-//         });
-//       } else {
-//         console.log('Database connected', data);
-//         resolve({
-//           error: false,
-//           message: data
-//         });
-//       }
-//     });
-//   });
-// }
 
-// const connectToRabbitMQPromise = () => {
-//   return new Promise((resolve, reject) => {
-//     connectToRabbitMQ((err, data) => {
-//       if (err) {
-//         console.error('RabbitMq Connction error:', err);
-//         reject({
-//           error: true,
-//           message: err
-//         });
-//       } else {
-//         console.log('RabbitMQ connected', data);
-//         resolve({
-//           error: false,
-//           message: data
-//         });
-//       }
-//     });
-//   });
-// }
 
 try {
   ( async() => {
@@ -70,8 +38,8 @@ try {
       throw new Error();
     }
     channel = rabbitMq.data
-    app.listen(4000, () => {
-      console.info(`server started running on port 3000`);
+    app.listen(port, () => {
+      console.info(`server started running on port ${port}`);
     });
   })();
 } catch (err) {

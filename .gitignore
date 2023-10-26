@@ -5,3 +5,5 @@ pushNotifications/node_modules
 emailNotifications/node_modules
 notificationManager/node_modules
 .env
+
+*.env

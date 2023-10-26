@@ -1,22 +1,13 @@
 const pushNotificationParamsValidator = (params) => {
-    if(!params.user_id || !params.message_type){
-        return false;
-    }
-    return true;
+    return !(!params.user_id || !params.message_type);
 }
 
 const smsNotificationParamsValidator = (params) => {
-    if(!params.user_id || !params.message_content || !params.mobile){
-        return false;
-    }
-    return true;
+    return !(!params.user_id || !params.message_content || !params.mobile);
 }
 
 const emailNotificationParamsValidator = (params) => {
-    if(!params.user_id || !params.body || !params.email){
-        return false;
-    }
-    return true;
+    return !(!params.user_id || !params.body || !params.email);
 }
 
 const notificationsList = {

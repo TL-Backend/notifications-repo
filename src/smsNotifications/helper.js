@@ -96,10 +96,10 @@ exports.smsNotificationHelper = async (payload) => {
     const { contact_info, notification_type, notification_id } = payload;
     const messageType = notificationTypes[notification_type];
     if (!messageType) {
-      let response = { error: true, message: "Invalid Notifcation type" };
+      let response = { error: true, message: "Invalid Notification type" };
       await this.updateDBNotification(response, notification_id);
       return {
-        message: "Invalid Notifcation type",
+        message: "Invalid Notification type",
         error: true,
         code: 400,
       };
@@ -129,9 +129,3 @@ exports.smsNotificationHelper = async (payload) => {
     };
   }
 };
-
-// module.exports. = {
-//     smsNotificationHelper,
-//     updateDBNotification,
-//     sendSMSNotification
-// }

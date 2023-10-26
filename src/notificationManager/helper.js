@@ -61,14 +61,14 @@ exports.saveNotificationToDB = async (payload, group_id, channel) => {
 exports.sendChannelBasedNotification = async (payload, channelConfig) => {
   try {
     const { contact_info, notification_type, notification_id } = payload;
-    const notificaitonType = notificationTypes[notification_type];
-    if(!notificaitonType){
+    const notificationType = notificationTypes[notification_type];
+    if(!notificationType){
       return {
         code: 400,
         message: "Invalid notification_type",
       };
     }
-    const validateInput = notificaitonType(payload);
+    const validateInput = notificationType(payload);
     if(validateInput.error){
       return{
         code: 400,
@@ -78,21 +78,21 @@ exports.sendChannelBasedNotification = async (payload, channelConfig) => {
     let group_id = randomUUID();
     let error = false;
     let message;
-    for (let index = 0; index < payload.channels.length; index++) {
+    for (const element of payload.channels) {
       const notificationData = await this.saveNotificationToDB(
         payload,
         group_id,
-        payload.channels[index],
+        element,
       );
       if (notificationData.error) {
         error = true;
-        message = "unable to save in DB";
+        message = "Unable to save in DB.";
         break;
       }
       payload["notification_id"] = notificationData.data;
       const resp = await this.sendMessageToQueue(
         JSON.stringify(payload),
-        payload.channels[index],
+        element,
         channelConfig,
       );
       if (resp.error) {
@@ -117,8 +117,3 @@ exports.sendChannelBasedNotification = async (payload, channelConfig) => {
   }
 };
 
-// module.exports = {
-//     pushNotificationParamsValidator,
-//     smsNotificationParamsValidator,
-//     emailNotificationParamsValidator
-// };

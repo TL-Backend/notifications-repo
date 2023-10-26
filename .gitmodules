@@ -1,0 +1,12 @@
+[submodule "src/notificationManager/services/aerpace-ecosystem-backend-db"]
+	path = src/notificationManager/services/aerpace-ecosystem-backend-db
+	url = git@github.com:TL-Backend/aerpace-ecosystem-backend-db.git
+[submodule "src/emailNotifications/services/aerpace-ecosystem-backend-db"]
+	path = src/emailNotifications/services/aerpace-ecosystem-backend-db
+	url = git@github.com:TL-Backend/aerpace-ecosystem-backend-db.git
+[submodule "src/pushNotifications/services/aerpace-ecosystem-backend-db"]
+	path = src/pushNotifications/services/aerpace-ecosystem-backend-db
+	url = git@github.com:TL-Backend/aerpace-ecosystem-backend-db.git
+[submodule "src/smsNotifications/services/aerpace-ecosystem-backend-db"]
+	path = src/smsNotifications/services/aerpace-ecosystem-backend-db
+	url = git@github.com:TL-Backend/aerpace-ecosystem-backend-db.git

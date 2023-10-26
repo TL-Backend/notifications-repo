@@ -6,14 +6,14 @@ const { sequelize } = require('./sequelizer/models/index');
 const connectDb = async () => {
     try {
         await sequelize.authenticate();
-        console.info('Connected to db');
+        console.info('Connected to database.');
         return{
             code: 200,
-            message: "Connected to db",
+            message: "Connected to database.",
             error: false
         }
     } catch (err) {
-        console.error('failed to connect to db', err);        
+        console.error('Failed to connect to database.', err);        
         return{
             code: 401,
             message: err,

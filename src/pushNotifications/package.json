@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha"
+    "test": "nyc mocha",
+    "dev": "NODE_ENV=development node index.js"
   },
   "keywords": [],
   "author": "",
