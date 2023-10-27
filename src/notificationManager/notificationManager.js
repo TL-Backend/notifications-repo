@@ -16,12 +16,24 @@ const notificationManager = async ( notificationPayload, channel ) => {
                 message:"Internal Server Error",
             }
         }
-
     }
+}
 
-
-
-
+const addToken = async ( req ) => {
+    try {
+        const resp = await addTokenToUser(req.body)
+        return resp;
+    } catch (error) {
+        
+        console.log("Error occured while builing the notificaiton", error)
+        return {
+            success:false,
+            data: null,
+            error: {
+                message:"Internal Server Error",
+            }
+        }
+    }
 }
 
 module.exports = notificationManager

@@ -47,6 +47,7 @@ const validateNotificationType = (channels) => {
     };
 }
 
+
 module.exports = {
     pushNotificationParamsValidator,
     smsNotificationParamsValidator,

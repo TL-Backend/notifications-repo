@@ -10,7 +10,7 @@ const mandatoryParams = {
   },
   contact_info: {
     SMS_NOTIFICATION: ["mobile"],
-    PUSH_NOTIFICATION: ["token"],
+    PUSH_NOTIFICATION: [],
     EMAIL_NOTIFICATION: ["email"]
   }
 }
