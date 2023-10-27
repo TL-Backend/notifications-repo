@@ -1,11 +1,11 @@
-const { aergov_notification_audits } = require("./services/aerpace-ecosystem-backend-db/src/databases/postgresql/models");
+const {
+  aergov_notification_audits,
+} = require("./services/aerpace-ecosystem-backend-db/src/databases/postgresql/models");
 const { randomUUID } = require("crypto");
 const { notificationTypes } = require("./notificationTypes/notificationTypes");
 const exchange_name = "notification-exchange";
 const exchange_type = "direct";
-const {
-  validateNotificationType,
-} = require("./validate/validateParams");
+const { validateNotificationType } = require("./validate/validateParams");
 
 exports.sendMessageToQueue = async (message, routingKey, channel) => {
   try {
@@ -39,7 +39,7 @@ exports.saveNotificationToDB = async (payload, group_id, channel) => {
       status: "Pending",
       contact_details: payload?.contact_info,
       dynamic_content: payload?.content,
-      notification_type: payload.notification_type
+      notification_type: payload.notification_type,
     };
     const newNotification = await aergov_notification_audits.create(params);
     if (newNotification.id) {
@@ -60,20 +60,22 @@ exports.saveNotificationToDB = async (payload, group_id, channel) => {
 
 exports.sendChannelBasedNotification = async (payload, channelConfig) => {
   try {
-    const { contact_info, notification_type, notification_id } = payload;
+    const { notification_type } = payload;
     const notificationType = notificationTypes[notification_type];
-    if(!notificationType){
+    if (!notificationType) {
       return {
         code: 400,
+        data: {},
         message: "Invalid notification_type",
       };
     }
     const validateInput = notificationType(payload);
-    if(validateInput.error){
-      return{
+    if (validateInput.error) {
+      return {
         code: 400,
-        message: validateInput.message
-      }
+        data: {},
+        message: validateInput.message,
+      };
     }
     let group_id = randomUUID();
     let error = false;
@@ -106,14 +108,15 @@ exports.sendChannelBasedNotification = async (payload, channelConfig) => {
     }
     return {
       code: 200,
+      data: {},
       message: "Messages are Sent...",
     };
   } catch (err) {
-    console.log("err",err)
+    console.log("err", err);
     return {
-      code: 400,
+      code: 500,
+      data: {},
       message: "Internal error",
     };
   }
 };
-
