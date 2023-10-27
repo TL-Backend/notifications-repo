@@ -107,6 +107,7 @@ exports.sendChannelBasedNotification = async (payload, channelConfig) => {
       throw new Error(message);
     }
     return {
+      data: {},
       code: 200,
       data: {},
       message: "Messages are Sent...",
