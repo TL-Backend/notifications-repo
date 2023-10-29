@@ -52,7 +52,7 @@ exports.sendPushNotification = async (payload, user_id) => {
 };
 
 exports.  updateDBNotification = async (resp, id) => {
-  console.log("resp--->", resp, id);
+  
   try {
     let updateParams = {};
 
