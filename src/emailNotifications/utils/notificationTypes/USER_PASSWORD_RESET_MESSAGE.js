@@ -69,17 +69,11 @@ const buildPasswordResetMessage = (params) => {
   } = require(`../languages/${params.lang || "en"}`);
 
   const { subject, body } = userForgotPassword(params);
-  const { title, p1, p2, p3, thanking, reset_password_button } = body;
 
-  let bodyTemplate = temporaryPasswordTemplate
+
+  let bodyTemplate = body
     .replace("{user_name}", user_name)
-    .replace("{Password Reset Link}", reset_password_link)
-    .replace("{title}", title)
-    .replace("{p1}", p1)
-    .replace("{p2}", p2)
-    .replace("{p3}", p3)
-    .replace("{reset_password_button}", reset_password_button)
-    .replace("{thanking}", thanking);
+    .replace("{reset_password_link}", reset_password_link)
 
   return {
     body: bodyTemplate,

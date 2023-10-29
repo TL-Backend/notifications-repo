@@ -69,16 +69,10 @@ const buildTemporaryPassword = (params) => {
   } = require(`../languages/${params.lang || "en"}`);
 
   const { subject, body } = userTemporaryPassword(params);
-  const { title, p1, p2, p3, thanking } = body;
 
-  let bodyTemplate = temporaryPasswordTemplate
+  let bodyTemplate = body
     .replace("{user_name}", user_name)
     .replace("{temporary_password}", temporary_password)
-    .replace("{title}", title)
-    .replace("{p1}", p1)
-    .replace("{p2}", p2)
-    .replace("{p3}", p3)
-    .replace("{thanking}", thanking);
 
   return {
     body: bodyTemplate,
