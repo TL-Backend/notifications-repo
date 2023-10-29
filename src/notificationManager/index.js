@@ -1,8 +1,8 @@
 const { connectToRabbitMQ, connectDb } = require("./config/connections");
 const express = require("express");
 const app = express();
-const notificationManager = require('./notificationManager');
-const { addToken } = require('./tokens/token.controller');
+const notificationManager = require("./notificationManager");
+const { addToken } = require("./tokens/token.controller");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -25,15 +25,17 @@ app.post("/notifications", async (req, res) => {
   }
 });
 
-app.post("/token/:user_id", async(req, res) => {
-  try{
-    const response = await addToken(req)
-    res.status(response.code).send(response);
-  }catch(err){
-    res.send(err);
-    console.error(err)
+app.post("/token/:user_id", async (req, res) => {
+  try {
+    const { code, message, data } = await addToken(req);
+    res.status(code).send({ code, message, data });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .send({ code: 500, message: "Something went wrong.", data: {} });
   }
-})
+});
 
 try {
   (async () => {

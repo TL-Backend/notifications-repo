@@ -2,11 +2,13 @@ const {
   notificationTypes,
 } = require("./utils/notificationTypes/notificationTypes");
 
-const { aergov_notification_audits } = require("./services/aerpace-ecosystem-backend-db/src/databases/postgresql/models");
+const {
+  aergov_notification_audits,
+} = require("./services/aerpace-ecosystem-backend-db/src/databases/postgresql/models");
 
 const admin = require("firebase-admin");
 
-const { getUserTokens, deleteToken} = require('./tokens/token.helper')
+const { getUserTokens, deleteToken } = require("./tokens/token.helper");
 
 const environment = process.env.NODE_ENV || "development";
 const envFilePath = `config/${environment}.env`;
@@ -21,27 +23,26 @@ exports.sendPushNotification = async (payload, user_id) => {
     const tokens = await getUserTokens(user_id);
     const { title, body } = payload;
     let respArray = [];
-    tokens.forEach(async data => {
+    tokens.forEach(async (data) => {
       try {
-      let message = {
-        notification: {
-          title: title,
-          body: body,
-        },
-        data: payload?.data,
-        token: data.token,
-      };
-      let resp = await admin.messaging().send(message);
-      respArray.push(resp);
-    }
-    catch(err){
-      await deleteToken(data.id)
-    }
+        let message = {
+          notification: {
+            title: title,
+            body: body,
+          },
+          data: payload?.data,
+          token: data.token,
+        };
+        let resp = await admin.messaging().send(message);
+        respArray.push(resp);
+      } catch (err) {
+        await deleteToken(data.id);
+      }
     });
     return {
       error: false,
-      message: respArray
-    }
+      message: respArray,
+    };
   } catch (err) {
     return {
       error: true,
@@ -50,9 +51,11 @@ exports.sendPushNotification = async (payload, user_id) => {
   }
 };
 
-exports.updateDBNotification = async (resp, id) => {
+exports.  updateDBNotification = async (resp, id) => {
+  console.log("resp--->", resp, id);
   try {
     let updateParams = {};
+
     if (!resp || !id) {
       throw new Error("Invalid params to process the request");
     }
@@ -80,8 +83,8 @@ exports.updateDBNotification = async (resp, id) => {
 };
 
 exports.pushNotificationHelper = async (payload) => {
+  const { notification_type, notification_id, user_id } = payload;
   try {
-    const { contact_info, notification_type, notification_id, user_id } = payload;
     const messageType = notificationTypes[notification_type];
     if (!messageType) {
       let response = { error: true, message: "Invalid Notification type" };
@@ -93,12 +96,12 @@ exports.pushNotificationHelper = async (payload) => {
       };
     }
     const messagePayload = messageType(payload);
-    const response = await this.sendPushNotification(
-      messagePayload,
-      user_id
+    const response = await this.sendPushNotification(messagePayload, user_id);
+    const dbResponse = await this.updateDBNotification(
+      response,
+      notification_id,
     );
-    const resp = await this.updateDBNotification(response, notification_id);
-    if (resp.error) {
+    if (dbResponse.error) {
       throw new Error("error while updating notification");
     }
     return {
@@ -108,6 +111,10 @@ exports.pushNotificationHelper = async (payload) => {
     };
   } catch (err) {
     console.log("err-->", err);
+    await this.updateDBNotification(
+      { error: true, message: "Language Not Found" },
+      notification_id,
+    );
     return {
       error: true,
       message: "Internal error",

@@ -1,19 +1,21 @@
 const { addTokenToUser } = require("./token.helper");
 
-
-exports.addToken = async ( req ) => {
-    try {
-        const resp = await addTokenToUser(req.body.token, req.params.user_id);
-        return resp;
-    } catch (error) {
-        
-        console.log("Error occured while builing the notificaiton", error)
-        return {
-            success:false,
-            data: null,
-            error: {
-                message:"Internal Server Error",
-            }
-        }
-    }
-}
+exports.addToken = async (req) => {
+  try {
+    const { user_id } = req.params;
+    const { token } = req.body;
+    const { code, message } = await addTokenToUser({ user_id, token });
+    return {
+      code,
+      message,
+      data: {},
+    };
+  } catch (error) {
+    console.log("Error occurred while building the notifications", error);
+    return {
+      code: 500,
+      message: "Something went wrong.",
+      data: {},
+    };
+  }
+};

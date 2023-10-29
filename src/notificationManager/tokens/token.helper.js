@@ -1,62 +1,73 @@
 const { getUserById } = require("./token.query");
-const { sequelize, aergov_mobile_tokens } = require("../services/aerpace-ecosystem-backend-db/src/databases/postgresql/models");
+const {
+  sequelize,
+  aergov_mobile_tokens,
+} = require("../services/aerpace-ecosystem-backend-db/src/databases/postgresql/models");
 const { validateInputForAddToken } = require("./token.middleware");
 
 exports.getUserDetails = async (id) => {
-    const query = getUserById;
-    const data = await sequelize.query(query, {
-      replacements: { user_id: id},
-      type: sequelize.QueryTypes.SELECT,
-    });
-    if (data[0].id === undefined) {
-        return {
-            error: true,
-            message: 'Invalid user_id'
-        }
-    }
-    return {
-        error: false
-    }
-}
- 
-exports.addTokenInDatabase = async (token, user_id) => {
-    const params = {
-        user_id,
-        token
-      };
-      await aergov_mobile_tokens.create(params); 
-}
+  const query = getUserById;
 
-exports.addTokenToUser = async (token, user_id) => {
+  const data = await sequelize.query(query, {
+    replacements: { user_id: id },
+    type: sequelize.QueryTypes.SELECT,
+  });
+
+  if (!data.length || data[0]?.id == "undefined") {
+    return {
+      error: true,
+      message: "Invalid user_id",
+      code: 400,
+    };
+  }
+
+  return {
+    error: false,
+    message: "success",
+    code: 200,
+  };
+};
+
+exports.addTokenInDatabase = async (token, user_id) => {
+  await aergov_mobile_tokens.create({ token, user_id });
+};
+
+exports.addTokenToUser = async ({token, user_id}) => {
   try {
-    const validate = validateInputForAddToken(token, user_id)
-    console.log("user_id",user_id);
-    if(validate.error){
+    const { error, code, message } = validateInputForAddToken(token, user_id);
+    console.log("user_id", user_id);
+    if (error) {
       return {
-        error: true,
-        code: 400,
-        message: validate.message
-      }
+        data: {},
+        code,
+        message: message,
+      };
     }
-    const user = await this.getUserDetails(user_id);
-    if(user.error){
-        return {
-          data: {},
-          code: 400,
-          message: user.message
-        }
+
+    const {
+      code: userDetailsStatus,
+      error: isValidUser,
+      message: userDetailsStatusMessage,
+    } = await this.getUserDetails(user_id);
+    if (isValidUser) {
+      return {
+        data: {},
+        code: userDetailsStatus,
+        message: userDetailsStatusMessage,
+      };
     }
+
     await this.addTokenInDatabase(token, user_id);
     return {
-        data: {},
-        code: 200,
-        message: "Token added successfully" 
-    }
+      data: {},
+      code: 200,
+      message: "Token added successfully.",
+    };
   } catch (err) {
     return {
-      data: undefined,
-      error: true,
-      message: err,
+      data: {},
+      code: 500,
+      message: "Something went wrong.",
     };
   }
 };

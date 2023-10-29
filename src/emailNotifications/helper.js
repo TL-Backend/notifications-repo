@@ -38,7 +38,7 @@ exports.sendEMAILNotification = async (param, email) => {
   const params = {
     Source: process.env.SOURCE_EMAIL,
     Destination: {
-      ToAddresses: [email], 
+      ToAddresses: [email],
     },
     Message: {
       Subject: {
@@ -90,7 +90,7 @@ exports.updateDBNotification = async (resp, id) => {
     }
     await aergov_notification_audits.update(updateParams, {
       where: { id },
-      returning: false, 
+      returning: false,
     });
     return {
       error: false,
@@ -117,8 +117,8 @@ const validateInput = (data) => {
 };
 
 exports.emailNotificationHelper = async (payload) => {
+  const { contact_info, notification_type, notification_id } = payload;
   try {
-    const { contact_info, notification_type, notification_id } = payload;
     const messageType = notificationTypes[notification_type];
     if (!messageType) {
       let response = { error: true, message: "Invalid Notification type" };
@@ -144,6 +144,11 @@ exports.emailNotificationHelper = async (payload) => {
       message: "Email send successfully",
     };
   } catch (err) {
+    console.log("err-->", err);
+    await this.updateDBNotification(
+      { error: true, message: "Language Not Found" },
+      notification_id,
+    );
     return {
       code: 500,
       error: true,

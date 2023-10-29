@@ -1,12 +1,30 @@
-
 exports.validateInputForAddToken = (token, user_id) => {
-    if(!token || !user_id || user_id === ':user_id'){
-        return {
-            error: true,
-            message: "Token and user_id should be present..."
-        }
+  try {
+    const errorMessages = [];
+
+    if (!user_id || user_id === ":user_id") {
+      errorMessages.push("UserId is mandatory");
     }
+
+    if (!token) {
+      errorMessages.push("Token is mandatory");
+    }
+
+    if (errorMessages.length) {
+      throw errorMessages.join(" ,");
+    }
+
     return {
-        error: false
-    }
-}
+      error: false,
+      code: 200,
+      message: "Success",
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      error: true,
+      code: 400,
+      message: err,
+    };
+  }
+};

@@ -92,8 +92,8 @@ exports.updateDBNotification = async (resp, id) => {
 };
 
 exports.smsNotificationHelper = async (payload) => {
+  const { contact_info, notification_type, notification_id } = payload;
   try {
-    const { contact_info, notification_type, notification_id } = payload;
     const messageType = notificationTypes[notification_type];
     if (!messageType) {
       let response = { error: true, message: "Invalid Notification type" };
@@ -104,7 +104,6 @@ exports.smsNotificationHelper = async (payload) => {
         code: 400,
       };
     }
-    console.log("messageType");
     const messagePayload = messageType(payload);
     const response = await this.sendSMSNotification(
       messagePayload.message,
@@ -123,6 +122,10 @@ exports.smsNotificationHelper = async (payload) => {
     };
   } catch (err) {
     console.log("err", err);
+    await this.updateDBNotification(
+      { error: true, message: "Language Not Found" },
+      notification_id,
+    );
     return {
       error: true,
       message: "Internal error",
