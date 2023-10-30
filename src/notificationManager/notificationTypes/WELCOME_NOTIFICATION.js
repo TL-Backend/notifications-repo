@@ -9,6 +9,8 @@ const validChannels = [
 const mandatoryParams = {
   content: {
     EMAIL_NOTIFICATION: ["user_name"],
+    PUSH_NOTIFICATION: [],
+    SMS_NOTIFICATION: [],
   },
   contact_info: {
     SMS_NOTIFICATION: ["mobile"],
@@ -25,10 +27,15 @@ const validateNotificationInput = (params) => {
       return;
     }
 
-    const hasAllContact = mandatoryParams.contact_info[channel].every((elem) =>
+
+    const hasAllContent = mandatoryParams.content[channel]?.every((elem) =>
+      params.content.hasOwnProperty(elem),
+    );
+    
+    const hasAllContact = mandatoryParams.contact_info[channel]?.every((elem) =>
       params.contact_info.hasOwnProperty(elem),
     );
-    if (!hasAllContact) {
+    if (!hasAllContent || !hasAllContact) {
       errorList.push(`Missing required data for ${channel}`);
       return;
     }
