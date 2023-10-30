@@ -21,6 +21,12 @@ admin.initializeApp({
 exports.sendPushNotification = async (payload, user_id) => {
   try {
     const tokens = await getUserTokens(user_id);
+    if( !tokens.length) {
+      return {
+        error: true,
+        message: "Token Not found.",
+      };
+    }
     const { title, body } = payload;
     let respArray = [];
     tokens.forEach(async (data) => {

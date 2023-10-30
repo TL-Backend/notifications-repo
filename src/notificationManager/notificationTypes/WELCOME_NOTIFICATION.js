@@ -7,6 +7,9 @@ const validChannels = [
 ];
 
 const mandatoryParams = {
+  content: {
+    EMAIL_NOTIFICATION: ["user_name"],
+  },
   contact_info: {
     SMS_NOTIFICATION: ["mobile"],
     PUSH_NOTIFICATION: [],

@@ -32,7 +32,7 @@ exports.addTokenInDatabase = async (token, user_id) => {
   await aergov_mobile_tokens.create({ token, user_id });
 };
 
-exports.addTokenToUser = async ({token, user_id}) => {
+exports.addTokenToUser = async ({ token, user_id }) => {
   try {
     const { error, code, message } = validateInputForAddToken(token, user_id);
     console.log("user_id", user_id);
@@ -54,6 +54,22 @@ exports.addTokenToUser = async ({token, user_id}) => {
         data: {},
         code: userDetailsStatus,
         message: userDetailsStatusMessage,
+      };
+    }
+
+    const tokenExists = await aergov_mobile_tokens.findOne({
+      where: {
+        user_id,
+        token,
+      },
+      raw: true,
+    });
+
+    if (tokenExists) {
+      return {
+        data: {},
+        code: 400,
+        message: "Token already exists",
       };
     }
 
