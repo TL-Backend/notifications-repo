@@ -119,6 +119,7 @@ module.exports = {
           .socials img {
             width: 29px;
             height: auto;
+            margin-right:10px;
           }
     
           .rights {

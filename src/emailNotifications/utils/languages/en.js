@@ -95,6 +95,7 @@ module.exports = {
           .socials img {
             width: 29px;
             height: auto;
+            margin-right:10px;
           }
     
           .rights {
@@ -263,7 +264,8 @@ module.exports = {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            
+            gap: 10px
+            background-color: red:
           }
     
           .socials {
@@ -277,6 +279,7 @@ module.exports = {
           .socials img {
             width: 29px;
             height: auto;
+            margin-right: 10px; 
           }
     
           .rights {
@@ -456,8 +459,7 @@ a new password. </p>
           .socials-rights {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            
+            align-items: flex-start;            
           }
     
           .socials {
@@ -471,6 +473,7 @@ a new password. </p>
           .socials img {
             width: 29px;
             height: auto;
+            margin-right:10px;
           }
     
           .rights {
